@@ -34,6 +34,10 @@
     <h1 id="app-title">MC<span class="mc-green">指令生成器</span></h1>
   </div>
   <div class="header-right">
+    <div class="mode-switch">
+      <button id="mode-single" class="mode-btn active i18n" data-i18n="mode_single">单指令</button>
+      <button id="mode-cb" class="mode-btn i18n" data-i18n="mode_cb">命令方块</button>
+    </div>
     <button id="btn-lang" class="btn-icon" title="Language / 语言">EN</button>
     <button id="btn-theme" class="btn-icon" title="Theme / 主题">◐</button>
   </div>
@@ -75,16 +79,100 @@
   </section>
 </main>
 
+<!-- ======== 命令方块模式（V2 实验性） ======== -->
+<section id="cb-mode" class="hidden">
+  <div class="cb-warn i18n" data-i18n="cb_warn">⚠ 命令方块模式为实验性功能，铺设指令请在创造模式世界先行测试，不同环境（整合包/插件）可能存在兼容差异。</div>
+
+  <div class="cb-layout">
+    <!-- 工具栏 -->
+    <div class="cb-toolbar">
+      <div class="cb-tool-group">
+        <span class="cb-tool-label i18n" data-i18n="cb_type">类型</span>
+        <select id="cb-tool-type">
+          <option value="impulse" class="i18n" data-i18n="cb_type_impulse">普通（脉冲）</option>
+          <option value="chain" selected class="i18n" data-i18n="cb_type_chain">连锁</option>
+          <option value="repeating" class="i18n" data-i18n="cb_type_repeating">循环</option>
+        </select>
+        <span class="cb-tool-label i18n" data-i18n="cb_facing">朝向</span>
+        <select id="cb-tool-facing">
+          <option value="north" selected>北 ↑</option>
+          <option value="south">南 ↓</option>
+          <option value="east">东 →</option>
+          <option value="west">西 ←</option>
+          <option value="up">上</option>
+          <option value="down">下</option>
+        </select>
+      </div>
+      <div class="cb-tool-group">
+        <span class="cb-tool-label i18n" data-i18n="cb_anchor">起点坐标</span>
+        <input type="number" id="cb-anchor-x" value="0" title="X">
+        <input type="number" id="cb-anchor-y" value="64" title="Y">
+        <input type="number" id="cb-anchor-z" value="0" title="Z">
+      </div>
+      <div class="cb-tool-group">
+        <span class="cb-tool-label i18n" data-i18n="cb_defaults">放置默认</span>
+        <label class="nbt-check"><input type="checkbox" id="cb-tool-auto" checked><span class="i18n" data-i18n="cb_auto">保持开启</span></label>
+        <label class="nbt-check"><input type="checkbox" id="cb-tool-cond"><span class="i18n" data-i18n="cb_cond">有条件</span></label>
+        <span class="cb-tool-label i18n" data-i18n="cb_delay">延迟</span>
+        <input type="number" id="cb-tool-delay" value="0" min="0" max="999" style="width:60px">
+      </div>
+      <div class="cb-tool-group cb-tool-actions">
+        <button id="cb-clear-all" class="btn-ghost i18n" data-i18n="cb_clear_all">清空画布</button>
+      </div>
+    </div>
+
+    <!-- 画布 -->
+    <div class="cb-canvas-wrap">
+      <div id="cb-canvas"></div>
+      <div class="cb-canvas-hint i18n" data-i18n="cb_canvas_hint">左键放置/选中，右键删除。箭头表示指令输出方向（连锁生效方向）。</div>
+    </div>
+
+    <!-- 属性面板 -->
+    <div class="cb-panel">
+      <div class="cb-panel-title i18n" data-i18n="cb_props">方块属性</div>
+      <div id="cb-props">
+        <div class="cb-props-empty i18n" data-i18n="cb_props_empty">在画布上点击一个命令方块进行编辑</div>
+      </div>
+    </div>
+
+    <!-- 输出 -->
+    <div class="cb-output">
+      <div class="cb-output-head">
+        <span class="i18n" data-i18n="cb_place_cmds">铺设指令（在游戏内依次执行，自动搭建命令方块链）</span>
+        <button id="cb-copy-all" class="btn-main i18n" data-i18n="cb_copy_all">全部复制</button>
+      </div>
+      <textarea id="cb-output-text" readonly spellcheck="false"></textarea>
+    </div>
+  </div>
+</section>
+
 <footer id="footer">
   <span>由Escape制作，适用于JAVA1.20.1</span>
-  <span id="ver">v1.0</span>
+  <div class="footer-right">
+    <button id="btn-feedback" class="footer-btn i18n" data-i18n="feedback" title="3419500575@qq.com">问题反馈</button>
+    <span id="ver">v2.0</span>
+  </div>
 </footer>
+
+<!-- 通用确认弹窗 -->
+<div id="modal" class="hidden">
+  <div class="modal-mask"></div>
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-actions">
+      <button id="modal-cancel" class="btn-ghost i18n" data-i18n="modal_cancel">取消</button>
+      <button id="modal-ok" class="btn-main i18n" data-i18n="modal_ok">确定</button>
+    </div>
+  </div>
+</div>
 
 <script src="js/i18n.js"></script>
 <script src="js/ids.js"></script>
 <script src="js/ids_items_vanilla.js"></script>
 <script src="js/ids_items_mods.js"></script>
+<script src="js/ids_entities_mods.js"></script>
 <script src="js/commands.js"></script>
 <script src="js/app.js"></script>
+<script src="js/cb.js"></script>
 </body>
 </html>

@@ -462,7 +462,9 @@ function attachIdPicker(block, p) {
   allChip.textContent = t('id_all');
   allChip.dataset.mod = '';
   filters.appendChild(allChip);
-  (IDS.MODS || []).forEach(m => {
+  // 只显示当前类型下有数据的 mod
+  const src = kind === 'item' ? (IDS.items || []) : (IDS.entities || []);
+  (IDS.MODS || []).filter(m => src.some(it => it.mod === m.key)).forEach(m => {
     const chip = document.createElement('button');
     chip.type = 'button';
     chip.className = 'id-filter-chip';
@@ -671,6 +673,50 @@ function clearCmd() {
   renderOutput();
 }
 
+/* ---------- 问题反馈：点击复制邮箱 ---------- */
+const FEEDBACK_EMAIL = '3419500575@qq.com';
+
+function feedback() {
+  const btn = $('btn-feedback');
+  const ta = document.createElement('textarea');
+  ta.value = FEEDBACK_EMAIL;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  const old = btn.textContent;
+  btn.textContent = FEEDBACK_EMAIL + ' ✓';
+  btn.classList.add('copied-flash');
+  setTimeout(() => { btn.textContent = old; btn.classList.remove('copied-flash'); }, 1600);
+}
+
+/* ---------- 通用确认弹窗 ---------- */
+let modalOkCb = null;
+function showConfirm(msg, onOk) {
+  document.getElementById('modal-title').textContent = msg;
+  document.getElementById('modal').classList.remove('hidden');
+  modalOkCb = onOk || null;
+}
+function hideModal() {
+  document.getElementById('modal').classList.add('hidden');
+  modalOkCb = null;
+}
+
+/* ---------- 模式切换（单指令 / 命令方块） ---------- */
+function setMode(mode) {
+  const single = mode === 'single';
+  document.getElementById('main').classList.toggle('hidden', !single);
+  document.getElementById('cb-mode').classList.toggle('hidden', single);
+  document.getElementById('mode-single').classList.toggle('active', single);
+  document.getElementById('mode-cb').classList.toggle('active', !single);
+  if (!single && !CBMode.enabled) {
+    CBMode.enabled = true;
+    cbInit();
+  }
+}
+
 /* ---------- 语言 & 主题 ---------- */
 function setLang(l) {
   LANG = l;
@@ -689,6 +735,10 @@ function setTheme(th) {
 
 /* ---------- 初始化 ---------- */
 function init() {
+  // 数据全局去重（按注册名）
+  IDS.items = IDS.items.filter((v, i, a) => a.findIndex(x => x.id === v.id) === i);
+  IDS.entities = IDS.entities.filter((v, i, a) => a.findIndex(x => x.id === v.id) === i);
+
   // 启动画面：加载条动画结束后淡出
   setTimeout(() => {
     const sp = $('splash');
@@ -709,6 +759,22 @@ function init() {
   });
   $('btn-copy').addEventListener('click', copyCmd);
   $('btn-clear').addEventListener('click', clearCmd);
+  $('btn-feedback').addEventListener('click', feedback);
+
+  // 确认弹窗
+  document.getElementById('modal-ok').addEventListener('click', () => {
+    const cb = modalOkCb;
+    hideModal();
+    if (cb) cb();
+  });
+  document.getElementById('modal-cancel').addEventListener('click', hideModal);
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target.classList.contains('modal-mask')) hideModal();
+  });
+
+  // 模式切换
+  document.getElementById('mode-single').addEventListener('click', () => setMode('single'));
+  document.getElementById('mode-cb').addEventListener('click', () => setMode('cb'));
 
   // 指令搜索
   const search = $('cmd-search');
