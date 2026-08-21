@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC指令生成器</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 启动画面 -->
+<div id="splash">
+  <div class="splash-box">
+    <div class="splash-cube">
+      <img src="assets/icon.png" alt="MC" draggable="false">
+    </div>
+    <div class="splash-title">MC<span class="mc-green">指令生成器</span></div>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- 背景动态装饰 -->
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-3"></div>
+<div class="bg-scan"></div>
+<div class="deco-block deco-block-1"></div>
+<div class="deco-block deco-block-2"></div>
+<div class="deco-block deco-block-3"></div>
+
+<header id="header">
+  <div class="header-left">
+    <img id="logo" src="assets/icon.png" alt="MC" draggable="false">
+    <h1 id="app-title">MC<span class="mc-green">指令生成器</span></h1>
+  </div>
+  <div class="header-right">
+    <button id="btn-lang" class="btn-icon" title="Language / 语言">EN</button>
+    <button id="btn-theme" class="btn-icon" title="Theme / 主题">◐</button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 左栏：指令分类树 -->
+  <aside id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="cmd-search" placeholder="🔍 搜索指令…">
+    </div>
+    <div id="cmd-tree"></div>
+  </aside>
+
+  <!-- 中栏：参数区 -->
+  <section id="params">
+    <div id="cmd-info" class="hidden"></div>
+    <div id="param-wrap">
+      <div id="param-empty" class="i18n" data-i18n="empty_hint">从左侧选择一个指令开始</div>
+    </div>
+    <div id="cmd-history">
+      <div class="history-title i18n" data-i18n="history_title">生成记录</div>
+      <div id="history-list"></div>
+    </div>
+  </section>
+
+  <!-- 右栏：输出区 -->
+  <section id="output">
+    <div id="output-head">
+      <span class="i18n" data-i18n="output_title">指令预览</span>
+      <span id="cmd-len"></span>
+    </div>
+    <textarea id="cmd-output" readonly spellcheck="false" placeholder="// 生成的指令将显示在这里"></textarea>
+    <div id="output-actions">
+      <button id="btn-copy" class="btn-main i18n" data-i18n="copy">复制</button>
+      <button id="btn-clear" class="btn-ghost i18n" data-i18n="clear">清空</button>
+    </div>
+    <div id="tip" class="i18n" data-i18n="chat_limit_tip">提示：聊天栏单条指令上限 256 字符，长指令请使用命令方块。</div>
+  </section>
+</main>
+
+<footer id="footer">
+  <span>由Escape制作，适用于JAVA1.20.1</span>
+  <span id="ver">v1.0</span>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/ids.js"></script>
+<script src="js/ids_items_vanilla.js"></script>
+<script src="js/ids_items_mods.js"></script>
+<script src="js/commands.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

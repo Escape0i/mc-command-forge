@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.tmp/
+
+# PyInstaller 产物
+build/
+dist/
+*.spec
+
+# 打包好的 exe 走 GitHub Releases，不进仓库
+*.exe
+
+# 本地测试
+*.log
