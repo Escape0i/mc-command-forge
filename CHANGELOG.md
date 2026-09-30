@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.0] - 2026-08-22
+## [v3.0] - 2026-09-30
 
 ### Added
 - **Command Block Mode (V2, experimental)** — new mode switch in the top-right corner:
